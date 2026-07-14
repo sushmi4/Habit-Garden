@@ -1,0 +1,225 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ plant.get_plant_type_display }} - Habit Garden{% endblock %}
+
+{% block extra_css %}
+<style>
+    .plant-detail-container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    
+    .plant-hero {
+        text-align: center;
+        padding: var(--spacing-2xl);
+        background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
+        border-radius: var(--radius-xl);
+        margin-bottom: var(--spacing-xl);
+    }
+    
+    .plant-emoji-large {
+        font-size: 6rem;
+        animation: sway 3s ease-in-out infinite;
+        display: inline-block;
+    }
+    
+    .plant-hero h1 {
+        margin-top: var(--spacing-md);
+        color: var(--dark-green);
+    }
+    
+    .plant-type-badge {
+        display: inline-block;
+        padding: var(--spacing-xs) var(--spacing-md);
+        background: var(--white);
+        border-radius: var(--radius-full);
+        font-size: var(--font-size-sm);
+        color: var(--text-light);
+        margin-top: var(--spacing-sm);
+    }
+    
+    @keyframes sway {
+        0%, 100% { transform: rotate(-5deg); }
+        50% { transform: rotate(5deg); }
+    }
+    
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: var(--spacing-lg);
+        margin-bottom: var(--spacing-xl);
+    }
+    
+    .info-card {
+        background: var(--white);
+        padding: var(--spacing-lg);
+        border-radius: var(--radius-lg);
+        text-align: center;
+        box-shadow: var(--shadow-sm);
+    }
+    
+    .info-card .info-icon {
+        font-size: 2rem;
+        margin-bottom: var(--spacing-sm);
+    }
+    
+    .info-card .info-value {
+        font-size: var(--font-size-2xl);
+        font-weight: 700;
+        color: var(--primary-green);
+    }
+    
+    .info-card .info-label {
+        font-size: var(--font-size-sm);
+        color: var(--text-light);
+        margin-top: var(--spacing-xs);
+    }
+    
+    .health-section {
+        background: var(--white);
+        padding: var(--spacing-xl);
+        border-radius: var(--radius-lg);
+        margin-bottom: var(--spacing-xl);
+        box-shadow: var(--shadow-sm);
+    }
+    
+    .health-bar-large {
+        height: 20px;
+        background: var(--border);
+        border-radius: var(--radius-full);
+        overflow: hidden;
+        margin: var(--spacing-md) 0;
+    }
+    
+    .health-fill-large {
+        height: 100%;
+        background: linear-gradient(90deg, var(--primary-green), var(--light-green));
+        border-radius: var(--radius-full);
+        transition: width var(--transition-slow);
+    }
+    
+    .tips-section {
+        background: var(--white);
+        padding: var(--spacing-xl);
+        border-radius: var(--radius-lg);
+        margin-bottom: var(--spacing-xl);
+        box-shadow: var(--shadow-sm);
+    }
+    
+    .tips-section h2 {
+        margin-bottom: var(--spacing-lg);
+        padding-bottom: var(--spacing-md);
+        border-bottom: 1px solid var(--border);
+    }
+    
+    .tip-item {
+        display: flex;
+        gap: var(--spacing-md);
+        padding: var(--spacing-md);
+        background: #F1F8E9;
+        border-radius: var(--radius-md);
+        margin-bottom: var(--spacing-sm);
+    }
+    
+    .tip-icon {
+        font-size: 1.5rem;
+    }
+    
+    .tip-text {
+        flex: 1;
+        color: var(--text-dark);
+    }
+    
+    .habit-link {
+        display: block;
+        background: var(--white);
+        padding: var(--spacing-lg);
+        border-radius: var(--radius-lg);
+        text-decoration: none;
+        box-shadow: var(--shadow-sm);
+        transition: all var(--transition-fast);
+    }
+    
+    .habit-link:hover {
+        box-shadow: var(--shadow-md);
+        transform: translateY(-2px);
+    }
+    
+    .habit-link h3 {
+        color: var(--dark-green);
+        margin-bottom: var(--spacing-sm);
+    }
+    
+    .habit-link p {
+        color: var(--text-light);
+        margin: 0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="plant-detail-container">
+    <!-- Plant Hero -->
+    <div class="plant-hero">
+        <div class="plant-emoji-large">{{ plant.get_emoji }}</div>
+        <h1>{{ plant.habit.name }}</h1>
+        <span class="plant-type-badge">{{ plant.get_plant_type_display }} • {{ plant.get_stage_display }}</span>
+    </div>
+    
+    <!-- Plant Stats -->
+    <div class="info-grid">
+        <div class="info-card">
+            <div class="info-icon">🔥</div>
+            <div class="info-value">{{ streak }}</div>
+            <div class="info-label">Current Streak</div>
+        </div>
+        <div class="info-card">
+            <div class="info-icon">🏆</div>
+            <div class="info-value">{{ plant.best_streak }}</div>
+            <div class="info-label">Best Streak</div>
+        </div>
+        <div class="info-card">
+            <div class="info-icon">📅</div>
+            <div class="info-value">{{ plant.created_at|date:"M d" }}</div>
+            <div class="info-label">Planted On</div>
+        </div>
+    </div>
+    
+    <!-- Health Section -->
+    <div class="health-section">
+        <h2>Plant Health</h2>
+        <div class="health-bar-large">
+            <div class="health-fill-large" style="width: {{ plant.health }}%"></div>
+        </div>
+        <p style="text-align: center; color: var(--text-light);">
+            {{ plant.health }}% - 
+            {% if plant.health >= 80 %}
+                Thriving! Keep up the great work!
+            {% elif plant.health >= 50 %}
+                Healthy, but could use more attention.
+            {% elif plant.health >= 20 %}
+                Needs care - complete your habit regularly!
+            {% else %}
+                In danger! Water your plant by completing your habit!
+            {% endif %}
+        </p>
+    </div>
+    
+    <!-- Care Tips -->
+    <div class="tips-section">
+        <h2>🌱 Care Tips</h2>
+        {% for tip in tips %}
+            <div class="tip-item">
+                <span class="tip-icon">💡</span>
+                <span class="tip-text">{{ tip }}</span>
+            </div>
+        {% endfor %}
+    </div>
+    
+    <!-- Linked Habit -->
+    <a href="{% url 'habit_detail' pk=plant.habit.pk %}" class="habit-link">
+        <h3>📝 Linked Habit: {{ plant.habit.name }}</h3>
+        <p>{{ plant.habit.get_frequency_display }} • Click to view habit details</p>
+    </a>
+</div>
+{% endblock %}

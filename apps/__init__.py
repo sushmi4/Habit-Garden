@@ -1,0 +1,1 @@
+# Apps package - contains all Django applications for Habit Garden

@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Dashboard - Habit Garden{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+    <!-- Dashboard Header -->
+    <div class="dashboard-header">
+        <div class="welcome-section">
+            <h1>Good {% if today.hour < 12 %}Morning{% elif today.hour < 18 %}Afternoon{% else %}Evening{% endif %}, {{ user.username }}!</h1>
+            <p>Here's your habit overview for today</p>
+        </div>
+        
+        <div class="stats-summary">
+            <div class="stat-item">
+                <span class="stat-value" id="completed-count">{{ completed_today }}</span>
+                <span class="stat-label">of <span id="total-habits">{{ total_habits }}</span> done</span>
+            </div>
+            <div class="progress-ring">
+                <svg viewBox="0 0 100 100">
+                    <circle class="progress-bg" cx="50" cy="50" r="40"></circle>
+                    <circle class="progress-fill" id="progress-ring-circle" cx="50" cy="50" r="40" 
+                            style="stroke-dashoffset: {{ ring_offset }}"></circle>
+                </svg>
+                <span class="progress-text" id="progress-percentage">{{ completion_rate }}%</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Habits List -->
+    <div class="habits-section">
+        <div class="section-header">
+            <h2>Today's Habits</h2>
+            <a href="{% url 'habit_create' %}" class="btn btn-primary btn-small">
+                + New Habit
+            </a>
+        </div>
+        
+        {% if habits_with_status %}
+            <div class="habits-grid">
+                {% for item in habits_with_status %}
+                    <div class="habit-card {% if item.completed_today %}completed{% endif %}" 
+                         data-habit-id="{{ item.habit.pk }}">
+                        
+                        <!-- Habit Header -->
+                        <div class="habit-header">
+                            <h3 class="habit-name">{{ item.habit.name }}</h3>
+                            <div class="habit-streak">
+                                <span class="streak-icon">🔥</span>
+                                <span class="streak-count">{{ item.current_streak }}</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Habit Description -->
+                        {% if item.habit.description %}
+                            <p class="habit-description">{{ item.habit.description }}</p>
+                        {% endif %}
+                        
+                        <!-- Habit Actions -->
+                        <div class="habit-actions">
+                            <button type="button" class="complete-btn {% if item.completed_today %}completed{% endif %}"
+                                    onclick="toggleComplete({{ item.habit.pk }})">
+                                {% if item.completed_today %}
+                                    ✓ Completed
+                                {% else %}
+                                    Mark Complete
+                                {% endif %}
+                            </button>
+                            
+                            <a href="{% url 'habit_detail' pk=item.habit.pk %}" class="btn btn-secondary btn-small">
+                                Details
+                            </a>
+                        </div>
+                        
+                        <!-- Streak Progress -->
+                        <div class="streak-bar">
+                            <div class="streak-fill" style="width: {{ item.current_streak|floatformat:0 }}%"></div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <!-- Empty State -->
+            <div class="empty-state">
+                <div class="empty-icon">🌱</div>
+                <h3>No habits yet!</h3>
+                <p>Start building good habits by creating your first one.</p>
+                <a href="{% url 'habit_create' %}" class="btn btn-primary">
+                    Create Your First Habit
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/habits.js' %}?v=2"></script>
+{% endblock %}

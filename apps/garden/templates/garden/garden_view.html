@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}My Garden - Habit Garden{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/garden.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="garden-container">
+    <!-- Garden Header -->
+    <div class="garden-header">
+        <h1>🌻 {{ user.profile.garden_name }}</h1>
+        <p>Your garden grows as your habits grow!</p>
+    </div>
+    
+    <!-- Garden Stats -->
+    <div class="garden-stats">
+        <div class="stat-card">
+            <div class="stat-icon">🌱</div>
+            <div class="stat-value">{{ stats.total_plants }}</div>
+            <div class="stat-label">Total Plants</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">🌸</div>
+            <div class="stat-value">{{ stats.blooming_count }}</div>
+            <div class="stat-label">Blooming</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">💚</div>
+            <div class="stat-value }}%">{{ stats.average_health }}%</div>
+            <div class="stat-label">Avg Health</div>
+        </div>
+    </div>
+    
+    {% if plants %}
+        <!-- Garden Scene -->
+        <div class="garden-scene">
+            <!-- Sky -->
+            <div class="sky">
+                <div class="sun">☀️</div>
+                <div class="cloud cloud-1">☁️</div>
+                <div class="cloud cloud-2">☁️</div>
+            </div>
+            
+            <!-- Ground -->
+            <div class="ground">
+                <!-- Blooming Plants (tallest) -->
+                {% for plant in blooming_plants %}
+                    <div class="plant-wrapper plant-blooming" style="animation-delay: {{ forloop.counter0 }}s">
+                        <a href="{% url 'plant_detail' pk=plant.pk %}">
+                            <div class="plant-emoji">{{ plant.get_emoji }}</div>
+                            <div class="plant-name">{{ plant.habit.name }}</div>
+                            <div class="plant-stage">Blooming</div>
+                        </a>
+                    </div>
+                {% endfor %}
+                
+                <!-- Mature Plants -->
+                {% for plant in mature_plants %}
+                    <div class="plant-wrapper plant-mature" style="animation-delay: {{ forloop.counter0 }}s">
+                        <a href="{% url 'plant_detail' pk=plant.pk %}">
+                            <div class="plant-emoji">{{ plant.get_emoji }}</div>
+                            <div class="plant-name">{{ plant.habit.name }}</div>
+                            <div class="plant-stage">Mature</div>
+                        </a>
+                    </div>
+                {% endfor %}
+                
+                <!-- Growing Plants -->
+                {% for plant in growing_plants %}
+                    <div class="plant-wrapper plant-growing" style="animation-delay: {{ forloop.counter0 }}s">
+                        <a href="{% url 'plant_detail' pk=plant.pk %}">
+                            <div class="plant-emoji">{{ plant.get_emoji }}</div>
+                            <div class="plant-name">{{ plant.habit.name }}</div>
+                            <div class="plant-stage">Growing</div>
+                        </a>
+                    </div>
+                {% endfor %}
+                
+                <!-- Sprouts -->
+                {% for plant in sprout_plants %}
+                    <div class="plant-wrapper plant-sprout" style="animation-delay: {{ forloop.counter0 }}s">
+                        <a href="{% url 'plant_detail' pk=plant.pk %}">
+                            <div class="plant-emoji">{{ plant.get_emoji }}</div>
+                            <div class="plant-name">{{ plant.habit.name }}</div>
+                            <div class="plant-stage">Sprout</div>
+                        </a>
+                    </div>
+                {% endfor %}
+                
+                <!-- Seeds (smallest) -->
+                {% for plant in seed_plants %}
+                    <div class="plant-wrapper plant-seed" style="animation-delay: {{ forloop.counter0 }}s">
+                        <a href="{% url 'plant_detail' pk=plant.pk %}">
+                            <div class="plant-emoji">{{ plant.get_emoji }}</div>
+                            <div class="plant-name">{{ plant.habit.name }}</div>
+                            <div class="plant-stage">Seed</div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <!-- Plant List -->
+        <div class="plant-list-section">
+            <h2>All Plants</h2>
+            <div class="plant-grid">
+                {% for plant in plants %}
+                    <a href="{% url 'plant_detail' pk=plant.pk %}" class="plant-card">
+                        <div class="plant-card-emoji">{{ plant.get_emoji }}</div>
+                        <div class="plant-card-info">
+                            <h3>{{ plant.habit.name }}</h3>
+                            <span class="stage-badge stage-{{ plant.stage }}">
+                                {{ plant.get_stage_display }}
+                            </span>
+                        </div>
+                        <div class="plant-card-health">
+                            <div class="health-bar">
+                                <div class="health-fill" style="width: {{ plant.health }}%"></div>
+                            </div>
+                            <span class="health-text">{{ plant.health }}%</span>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    {% else %}
+        <!-- Empty Garden -->
+        <div class="empty-garden">
+            <div class="empty-icon">🌱</div>
+            <h2>Your garden is empty!</h2>
+            <p>Start tracking habits to grow your first plant.</p>
+            <a href="{% url 'habit_create' %}" class="btn btn-primary">
+                Create Your First Habit
+            </a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

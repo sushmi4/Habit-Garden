@@ -1,0 +1,9 @@
+# Habit Garden - Python Dependencies
+# 
+# This file lists all Python packages required to run the application.
+# Install with: pip install -r requirements.txt
+
+# Django web framework
+Django>=4.2,<5.0
+
+# SQLite is included with Python, no additional package needed

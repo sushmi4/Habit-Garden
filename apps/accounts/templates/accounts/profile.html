@@ -1,0 +1,185 @@
+{% extends 'base.html' %}
+
+{% block title %}Profile - Habit Garden{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Profile Page Styles */
+    .profile-container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    
+    .profile-header {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-xl);
+        margin-bottom: var(--spacing-xl);
+    }
+    
+    .profile-avatar {
+        width: 120px;
+        height: 120px;
+        background: linear-gradient(135deg, var(--primary-green), var(--light-green));
+        border-radius: var(--radius-full);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        color: var(--white);
+    }
+    
+    .profile-info h1 {
+        margin-bottom: var(--spacing-sm);
+    }
+    
+    .profile-info p {
+        color: var(--text-light);
+        margin: 0;
+    }
+    
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: var(--spacing-md);
+        margin-bottom: var(--spacing-xl);
+    }
+    
+    .stat-card {
+        background: var(--white);
+        padding: var(--spacing-lg);
+        border-radius: var(--radius-lg);
+        text-align: center;
+        box-shadow: var(--shadow-sm);
+    }
+    
+    .stat-card .stat-icon {
+        font-size: 2rem;
+        margin-bottom: var(--spacing-sm);
+    }
+    
+    .stat-card .stat-value {
+        font-size: var(--font-size-2xl);
+        font-weight: 700;
+        color: var(--dark-green);
+    }
+    
+    .stat-card .stat-label {
+        font-size: var(--font-size-sm);
+        color: var(--text-light);
+    }
+    
+    .profile-form-section {
+        background: var(--white);
+        border-radius: var(--radius-lg);
+        padding: var(--spacing-xl);
+        box-shadow: var(--shadow-sm);
+    }
+    
+    .profile-form-section h2 {
+        margin-bottom: var(--spacing-lg);
+        padding-bottom: var(--spacing-md);
+        border-bottom: 1px solid var(--border);
+    }
+    
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--spacing-lg);
+    }
+    
+    @media (max-width: 600px) {
+        .profile-header {
+            flex-direction: column;
+            text-align: center;
+        }
+        
+        .form-row {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+    <!-- Profile Header -->
+    <div class="profile-header">
+        <div class="profile-avatar">
+            {{ user.username|first|upper }}
+        </div>
+        <div class="profile-info">
+            <h1>{{ user.get_full_name|default:user.username }}</h1>
+            <p>{{ user.email }}</p>
+        </div>
+    </div>
+    
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon">📝</div>
+            <div class="stat-value">{{ total_habits }}</div>
+            <div class="stat-label">Total Habits</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">✅</div>
+            <div class="stat-value">{{ active_habits }}</div>
+            <div class="stat-label">Active Habits</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">🌱</div>
+            <div class="stat-value">{{ total_plants }}</div>
+            <div class="stat-label">Plants</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">⭐</div>
+            <div class="stat-value">{{ user.profile.total_xp }}</div>
+            <div class="stat-label">XP Earned</div>
+        </div>
+    </div>
+    
+    <!-- Profile Form -->
+    <div class="profile-form-section">
+        <h2>Update Profile</h2>
+        
+        <form method="POST">
+            {% csrf_token %}
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="{{ user_form.username.id_for_label }}">Username</label>
+                    {{ user_form.username }}
+                    {% if user_form.username.errors %}
+                        <ul class="errorlist">
+                            {% for error in user_form.username.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group">
+                    <label for="{{ user_form.email.id_for_label }}">Email</label>
+                    {{ user_form.email }}
+                    {% if user_form.email.errors %}
+                        <ul class="errorlist">
+                            {% for error in user_form.email.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="{{ profile_form.garden_name.id_for_label }}">Garden Name</label>
+                {{ profile_form.garden_name }}
+            </div>
+            
+            <button type="submit" class="btn btn-primary">
+                Save Changes
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

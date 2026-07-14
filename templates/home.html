@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+
+{% block title %}Welcome to Habit Garden{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Home Page Specific Styles */
+    .hero {
+        text-align: center;
+        padding: var(--spacing-2xl) 0;
+    }
+    
+    .hero h1 {
+        font-size: 2.5rem;
+        color: var(--forest-green);
+        margin-bottom: var(--spacing-md);
+    }
+    
+    .hero p {
+        font-size: var(--font-size-xl);
+        color: var(--text-light);
+        max-width: 600px;
+            margin: 0 auto var(--spacing-lg);
+    }
+    
+    .hero-cta {
+        display: flex;
+        gap: var(--spacing-md);
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    .features {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: var(--spacing-lg);
+        margin-top: var(--spacing-2xl);
+    }
+    
+    .feature-card {
+        text-align: center;
+        padding: var(--spacing-xl);
+    }
+    
+    .feature-icon {
+        font-size: 3rem;
+        margin-bottom: var(--spacing-md);
+    }
+    
+    .feature-card h3 {
+        color: var(--dark-green);
+        margin-bottom: var(--spacing-sm);
+    }
+    
+    .feature-card p {
+        color: var(--text-light);
+        font-size: var(--font-size-sm);
+    }
+    
+    .garden-preview {
+        background: linear-gradient(to bottom, #87CEEB 0%, #87CEEB 60%, #8D6E63 60%, #5D4037 100%);
+        border-radius: var(--radius-xl);
+        padding: var(--spacing-2xl);
+        margin-top: var(--spacing-2xl);
+        text-align: center;
+        min-height: 200px;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        gap: var(--spacing-lg);
+        flex-wrap: wrap;
+    }
+    
+    .preview-plant {
+        font-size: 4rem;
+        animation: sway 3s ease-in-out infinite;
+    }
+    
+    .preview-plant:nth-child(2) { animation-delay: 0.5s; }
+    .preview-plant:nth-child(3) { animation-delay: 1s; }
+    .preview-plant:nth-child(4) { animation-delay: 1.5s; }
+    
+    @keyframes sway {
+        0%, 100% { transform: rotate(-3deg); }
+        50% { transform: rotate(3deg); }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <h1>🌱 Welcome to Habit Garden</h1>
+    <p>
+        Transform your daily habits into a beautiful garden. 
+        Watch your consistency bloom into something amazing!
+    </p>
+    
+    <div class="hero-cta">
+        {% if user.is_authenticated %}
+            <a href="{% url 'dashboard' %}" class="btn btn-primary">Go to Dashboard</a>
+            <a href="{% url 'garden' %}" class="btn btn-secondary">View My Garden</a>
+        {% else %}
+            <a href="{% url 'register' %}" class="btn btn-primary">Start Growing</a>
+            <a href="{% url 'login' %}" class="btn btn-secondary">Login</a>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features">
+    <div class="card feature-card">
+        <div class="feature-icon">📝</div>
+        <h3>Track Habits</h3>
+        <p>Create and track your daily habits. Mark them complete and build streaks.</p>
+    </div>
+    
+    <div class="card feature-card">
+        <div class="feature-icon">🔥</div>
+        <h3>Build Streaks</h3>
+        <p>Maintain consistency and watch your streaks grow day by day.</p>
+    </div>
+    
+    <div class="card feature-card">
+        <div class="feature-icon">🌻</div>
+        <h3>Grow Your Garden</h3>
+        <p>Each habit grows a plant. Better streaks mean healthier plants!</p>
+    </div>
+</section>
+
+<!-- Garden Preview -->
+<div class="garden-preview">
+    <div class="preview-plant">🌱</div>
+    <div class="preview-plant">🌿</div>
+    <div class="preview-plant">🌻</div>
+    <div class="preview-plant">🌳</div>
+</div>
+{% endblock %}

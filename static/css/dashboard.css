@@ -1,0 +1,289 @@
+/*
+ * Dashboard Stylesheet
+ * 
+ * Styles for the main dashboard page where users see today's habits.
+ */
+
+/* ============================================
+   Dashboard Layout
+   ============================================ */
+.dashboard {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+/* ============================================
+   Dashboard Header
+   ============================================ */
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-xl);
+    padding: var(--spacing-lg);
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+}
+
+.welcome-section h1 {
+    font-size: var(--font-size-2xl);
+    margin-bottom: var(--spacing-xs);
+}
+
+.welcome-section p {
+    color: var(--text-light);
+    margin: 0;
+}
+
+/* ============================================
+   Stats Summary
+   ============================================ */
+.stats-summary {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-item .stat-value {
+    display: block;
+    font-size: var(--font-size-2xl);
+    font-weight: 700;
+    color: var(--primary-green);
+}
+
+.stat-item .stat-label {
+    font-size: var(--font-size-sm);
+    color: var(--text-light);
+}
+
+/* Progress Ring */
+.progress-ring {
+    position: relative;
+    width: 80px;
+    height: 80px;
+}
+
+.progress-ring svg {
+    transform: rotate(-90deg);
+    width: 100%;
+    height: 100%;
+}
+
+.progress-ring .progress-bg {
+    fill: none;
+    stroke: var(--border);
+    stroke-width: 8;
+}
+
+.progress-ring .progress-fill {
+    fill: none;
+    stroke: var(--primary-green);
+    stroke-width: 8;
+    stroke-linecap: round;
+    stroke-dasharray: 251.2;  /* 2 * PI * 40 */
+    transition: stroke-dashoffset var(--transition-slow);
+}
+
+.progress-ring .progress-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: var(--font-size-sm);
+    font-weight: 700;
+    color: var(--dark-green);
+}
+
+/* ============================================
+   Habits Section
+   ============================================ */
+.habits-section {
+    margin-top: var(--spacing-lg);
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-lg);
+}
+
+.section-header h2 {
+    margin: 0;
+}
+
+/* ============================================
+   Habits Grid
+   ============================================ */
+.habits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+/* ============================================
+   Habit Card
+   ============================================ */
+.habit-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition-fast);
+    border-left: 4px solid var(--primary-green);
+}
+
+.habit-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+.habit-card.completed {
+    background: linear-gradient(135deg, #E8F5E9 0%, #F1F8E9 100%);
+    border-left-color: var(--light-green);
+}
+
+.habit-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--spacing-sm);
+}
+
+.habit-name {
+    font-size: var(--font-size-lg);
+    color: var(--dark-green);
+    margin: 0;
+}
+
+.habit-streak {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background: #FFF3E0;
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-sm);
+}
+
+.streak-icon {
+    font-size: var(--font-size-base);
+}
+
+.streak-count {
+    font-weight: 700;
+    color: #e65100;
+}
+
+.habit-description {
+    color: var(--text-light);
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--spacing-md);
+}
+
+/* ============================================
+   Habit Actions
+   ============================================ */
+.habit-actions {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+}
+
+.complete-btn {
+    flex: 1;
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--font-size-base);
+    font-weight: 500;
+    border: 2px solid var(--primary-green);
+    border-radius: var(--radius-md);
+    background: transparent;
+    color: var(--primary-green);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.complete-btn:hover {
+    background: var(--primary-green);
+    color: var(--white);
+}
+
+.complete-btn.completed {
+    background: var(--primary-green);
+    color: var(--white);
+    border-color: var(--primary-green);
+}
+
+/* ============================================
+   Streak Bar
+   ============================================ */
+.streak-bar {
+    height: 6px;
+    background: var(--border);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+}
+
+.streak-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary-green), var(--light-green));
+    border-radius: var(--radius-full);
+    transition: width var(--transition-slow);
+    max-width: 100%;
+}
+
+/* ============================================
+   Empty State
+   ============================================ */
+.empty-state {
+    text-align: center;
+    padding: var(--spacing-2xl);
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+}
+
+.empty-icon {
+    font-size: 4rem;
+    margin-bottom: var(--spacing-md);
+}
+
+.empty-state h3 {
+    color: var(--dark-green);
+    margin-bottom: var(--spacing-sm);
+}
+
+.empty-state p {
+    color: var(--text-light);
+    margin-bottom: var(--spacing-lg);
+}
+
+/* ============================================
+   Responsive Design
+   ============================================ */
+@media (max-width: 768px) {
+    .dashboard-header {
+        flex-direction: column;
+        text-align: center;
+        gap: var(--spacing-lg);
+    }
+    
+    .stats-summary {
+        justify-content: center;
+    }
+    
+    .habits-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .section-header {
+        flex-direction: column;
+        gap: var(--spacing-md);
+        text-align: center;
+    }
+}

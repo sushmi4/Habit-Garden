@@ -1,0 +1,196 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ habit.name }} - Habit Garden{% endblock %}
+
+{% block extra_css %}
+<style>
+    .detail-container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    
+    .habit-header-card {
+        background: linear-gradient(135deg, var(--primary-green), var(--light-green));
+        color: var(--white);
+        border-radius: var(--radius-xl);
+        padding: var(--spacing-2xl);
+        margin-bottom: var(--spacing-xl);
+    }
+    
+    .habit-title {
+        font-size: var(--font-size-3xl);
+        margin-bottom: var(--spacing-sm);
+        color: var(--white);
+    }
+    
+    .habit-meta {
+        display: flex;
+        gap: var(--spacing-lg);
+        font-size: var(--font-size-sm);
+        opacity: 0.9;
+    }
+    
+    .habit-description {
+        margin-top: var(--spacing-md);
+        opacity: 0.9;
+    }
+    
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: var(--spacing-md);
+        margin-bottom: var(--spacing-xl);
+    }
+    
+    .stat-card {
+        background: var(--white);
+        padding: var(--spacing-lg);
+        border-radius: var(--radius-lg);
+        text-align: center;
+        box-shadow: var(--shadow-sm);
+    }
+    
+    .stat-card .stat-icon {
+        font-size: 2rem;
+        margin-bottom: var(--spacing-sm);
+    }
+    
+    .stat-card .stat-value {
+        font-size: var(--font-size-2xl);
+        font-weight: 700;
+        color: var(--primary-green);
+    }
+    
+    .stat-card .stat-label {
+        font-size: var(--font-size-sm);
+        color: var(--text-light);
+    }
+    
+    .section-card {
+        background: var(--white);
+        border-radius: var(--radius-lg);
+        padding: var(--spacing-xl);
+        box-shadow: var(--shadow-sm);
+        margin-bottom: var(--spacing-lg);
+    }
+    
+    .section-card h2 {
+        margin-bottom: var(--spacing-lg);
+        padding-bottom: var(--spacing-md);
+        border-bottom: 1px solid var(--border);
+    }
+    
+    .completion-list {
+        list-style: none;
+    }
+    
+    .completion-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: var(--spacing-md);
+        border-bottom: 1px solid var(--border);
+    }
+    
+    .completion-item:last-child {
+        border-bottom: none;
+    }
+    
+    .completion-date {
+        font-weight: 500;
+        color: var(--dark-green);
+    }
+    
+    .completion-notes {
+        color: var(--text-light);
+        font-size: var(--font-size-sm);
+    }
+    
+    .actions-bar {
+        display: flex;
+        gap: var(--spacing-md);
+        flex-wrap: wrap;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="detail-container">
+    <!-- Habit Header -->
+    <div class="habit-header-card">
+        <h1 class="habit-title">{{ habit.name }}</h1>
+        <div class="habit-meta">
+            <span>📅 {{ habit.get_frequency_display }}</span>
+            <span>Created {{ habit.created_at|date:"M d, Y" }}</span>
+        </div>
+        {% if habit.description %}
+            <p class="habit-description">{{ habit.description }}</p>
+        {% endif %}
+    </div>
+    
+    <!-- Stats -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon">🔥</div>
+            <div class="stat-value">{{ stats.current_streak }}</div>
+            <div class="stat-label">Current Streak</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">🏆</div>
+            <div class="stat-value">{{ stats.best_streak }}</div>
+            <div class="stat-label">Best Streak</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">✅</div>
+            <div class="stat-value">{{ stats.total_completions }}</div>
+            <div class="stat-label">Total Done</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">📊</div>
+            <div class="stat-value">{{ stats.completion_rate }}%</div>
+            <div class="stat-label">30-Day Rate</div>
+        </div>
+    </div>
+    
+    <!-- Actions -->
+    <div class="section-card">
+        <h2>Actions</h2>
+        <div class="actions-bar">
+            <a href="{% url 'habit_edit' pk=habit.pk %}" class="btn btn-primary">
+                Edit Habit
+            </a>
+            <a href="{% url 'habit_delete' pk=habit.pk %}" class="btn btn-danger">
+                Delete Habit
+            </a>
+            <a href="{% url 'habit_list' %}" class="btn btn-secondary">
+                Back to List
+            </a>
+        </div>
+    </div>
+    
+    <!-- Recent Completions -->
+    <div class="section-card">
+        <h2>Recent Completions</h2>
+        
+        {% if recent_completions %}
+            <ul class="completion-list">
+                {% for completion in recent_completions %}
+                    <li class="completion-item">
+                        <div>
+                            <span class="completion-date">{{ completion.date|date:"l, M d, Y" }}</span>
+                            {% if completion.notes %}
+                                <p class="completion-notes">{{ completion.notes }}</p>
+                            {% endif %}
+                        </div>
+                        <span style="color: var(--primary-green);">✓</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p style="text-align: center; color: var(--text-light); padding: var(--spacing-lg);">
+                No completions yet. Start building your streak!
+            </p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

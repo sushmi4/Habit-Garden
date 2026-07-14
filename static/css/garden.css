@@ -1,0 +1,328 @@
+/*
+ * Garden Stylesheet
+ * 
+ * Styles for the garden visualization page.
+ * This creates a nature-inspired scene with animated plants.
+ */
+
+/* ============================================
+   Garden Container
+   ============================================ */
+.garden-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.garden-header {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+}
+
+.garden-header h1 {
+    font-size: var(--font-size-3xl);
+    color: var(--forest-green);
+    margin-bottom: var(--spacing-sm);
+}
+
+.garden-header p {
+    color: var(--text-light);
+    font-size: var(--font-size-lg);
+}
+
+/* ============================================
+   Garden Stats
+   ============================================ */
+.garden-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
+}
+
+.garden-stats .stat-card {
+    background: var(--white);
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-lg);
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+}
+
+.garden-stats .stat-icon {
+    font-size: 2rem;
+    margin-bottom: var(--spacing-sm);
+}
+
+.garden-stats .stat-value {
+    font-size: var(--font-size-2xl);
+    font-weight: 700;
+    color: var(--primary-green);
+}
+
+.garden-stats .stat-label {
+    font-size: var(--font-size-sm);
+    color: var(--text-light);
+}
+
+/* ============================================
+   Garden Scene - The Main Visual
+   ============================================ */
+.garden-scene {
+    position: relative;
+    height: 400px;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    margin-bottom: var(--spacing-xl);
+    box-shadow: var(--shadow-lg);
+}
+
+/* Sky */
+.sky {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60%;
+    background: linear-gradient(180deg, #87CEEB 0%, #B3E5FC 100%);
+}
+
+.sun {
+    position: absolute;
+    top: 20px;
+    right: 40px;
+    font-size: 4rem;
+    animation: pulse 3s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.cloud {
+    position: absolute;
+    font-size: 3rem;
+    opacity: 0.8;
+}
+
+.cloud-1 {
+    top: 30px;
+    left: 10%;
+    animation: float 20s linear infinite;
+}
+
+.cloud-2 {
+    top: 60px;
+    left: 50%;
+    animation: float 25s linear infinite;
+}
+
+@keyframes float {
+    0% { transform: translateX(-100px); }
+    100% { transform: translateX(calc(100vw + 100px)); }
+}
+
+/* Ground */
+.ground {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 45%;
+    background: linear-gradient(180deg, #8D6E63 0%, #5D4037 100%);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: var(--spacing-lg);
+    padding: var(--spacing-lg);
+    flex-wrap: wrap;
+}
+
+/* ============================================
+   Plant Wrappers
+   ============================================ */
+.plant-wrapper {
+    text-align: center;
+    cursor: pointer;
+    transition: transform var(--transition-fast);
+}
+
+.plant-wrapper:hover {
+    transform: translateY(-10px);
+}
+
+.plant-emoji {
+    font-size: 3rem;
+    animation: sway 3s ease-in-out infinite;
+    display: inline-block;
+}
+
+.plant-name {
+    font-size: var(--font-size-xs);
+    color: var(--white);
+    background: rgba(0, 0, 0, 0.3);
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+    margin-top: var(--spacing-xs);
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.plant-stage {
+    font-size: var(--font-size-xs);
+    color: rgba(255, 255, 255, 0.7);
+    margin-top: 2px;
+}
+
+/* Plant size variations by stage */
+.plant-seed .plant-emoji { font-size: 2rem; }
+.plant-sprout .plant-emoji { font-size: 2.5rem; }
+.plant-growing .plant-emoji { font-size: 3rem; }
+.plant-mature .plant-emoji { font-size: 3.5rem; }
+.plant-blooming .plant-emoji { font-size: 4rem; }
+
+@keyframes sway {
+    0%, 100% { transform: rotate(-3deg); }
+    50% { transform: rotate(3deg); }
+}
+
+/* ============================================
+   Plant List Section
+   ============================================ */
+.plant-list-section {
+    margin-top: var(--spacing-xl);
+}
+
+.plant-list-section h2 {
+    margin-bottom: var(--spacing-lg);
+}
+
+.plant-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--spacing-md);
+}
+
+.plant-card {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    background: var(--white);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    text-decoration: none;
+    transition: all var(--transition-fast);
+}
+
+.plant-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+.plant-card-emoji {
+    font-size: 2.5rem;
+}
+
+.plant-card-info {
+    flex: 1;
+}
+
+.plant-card-info h3 {
+    margin: 0 0 var(--spacing-xs) 0;
+    font-size: var(--font-size-base);
+    color: var(--dark-green);
+}
+
+.stage-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+}
+
+.stage-seed { background: #D7CCC8; color: #5D4037; }
+.stage-sprout { background: #C8E6C9; color: #2E7D32; }
+.stage-growing { background: #A5D6A7; color: #1B5E20; }
+.stage-mature { background: #81C784; color: #1B5E20; }
+.stage-blooming { background: #FFE0B2; color: #E65100; }
+
+/* Health Bar */
+.plant-card-health {
+    text-align: center;
+}
+
+.health-bar {
+    width: 60px;
+    height: 6px;
+    background: var(--border);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    margin-bottom: 4px;
+}
+
+.health-fill {
+    height: 100%;
+    background: var(--primary-green);
+    border-radius: var(--radius-full);
+}
+
+.health-text {
+    font-size: var(--font-size-xs);
+    color: var(--text-light);
+}
+
+/* ============================================
+   Empty Garden State
+   ============================================ */
+.empty-garden {
+    text-align: center;
+    padding: var(--spacing-2xl);
+    background: var(--white);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
+}
+
+.empty-garden .empty-icon {
+    font-size: 5rem;
+    margin-bottom: var(--spacing-lg);
+}
+
+.empty-garden h2 {
+    color: var(--dark-green);
+    margin-bottom: var(--spacing-md);
+}
+
+.empty-garden p {
+    color: var(--text-light);
+    margin-bottom: var(--spacing-lg);
+}
+
+/* ============================================
+   Responsive Design
+   ============================================ */
+@media (max-width: 768px) {
+    .garden-scene {
+        height: 300px;
+    }
+    
+    .sun {
+        font-size: 3rem;
+        right: 20px;
+    }
+    
+    .cloud {
+        font-size: 2rem;
+    }
+    
+    .plant-emoji {
+        font-size: 2rem !important;
+    }
+    
+    .ground {
+        gap: var(--spacing-sm);
+        padding: var(--spacing-sm);
+    }
+}

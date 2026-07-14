@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block title %}Delete Habit - Habit Garden{% endblock %}
+
+{% block extra_css %}
+<style>
+    .delete-container {
+        max-width: 500px;
+        margin: 0 auto;
+    }
+    
+    .delete-card {
+        background: var(--white);
+        border-radius: var(--radius-xl);
+        box-shadow: var(--shadow-lg);
+        padding: var(--spacing-2xl);
+        text-align: center;
+    }
+    
+    .delete-icon {
+        font-size: 4rem;
+        margin-bottom: var(--spacing-lg);
+    }
+    
+    .delete-card h1 {
+        color: var(--berry-red);
+        margin-bottom: var(--spacing-md);
+    }
+    
+    .habit-name {
+        font-size: var(--font-size-xl);
+        color: var(--dark-green);
+        margin-bottom: var(--spacing-lg);
+    }
+    
+    .warning-text {
+        color: var(--text-light);
+        margin-bottom: var(--spacing-xl);
+        padding: var(--spacing-md);
+        background: #FFF3E0;
+        border-radius: var(--radius-md);
+        border-left: 4px solid var(--sunshine);
+    }
+    
+    .delete-actions {
+        display: flex;
+        gap: var(--spacing-md);
+    }
+    
+    .delete-actions .btn {
+        flex: 1;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="delete-container">
+    <div class="delete-card">
+        <div class="delete-icon">⚠️</div>
+        
+        <h1>Delete Habit?</h1>
+        
+        <p class="habit-name">"{{ habit.name }}"</p>
+        
+        <div class="warning-text">
+            <strong>Warning:</strong> This will permanently delete this habit and all its completion history. This action cannot be undone.
+        </div>
+        
+        <form method="POST">
+            {% csrf_token %}
+            
+            <div class="delete-actions">
+                <a href="{% url 'habit_detail' pk=habit.pk %}" class="btn btn-secondary">
+                    Cancel
+                </a>
+                <button type="submit" class="btn btn-danger">
+                    Yes, Delete
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

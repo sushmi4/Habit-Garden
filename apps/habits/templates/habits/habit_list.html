@@ -1,0 +1,187 @@
+{% extends 'base.html' %}
+
+{% block title %}My Habits - Habit Garden{% endblock %}
+
+{% block extra_css %}
+<style>
+    .habit-list-container {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+    
+    .list-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: var(--spacing-xl);
+    }
+    
+    .habit-item {
+        background: var(--white);
+        border-radius: var(--radius-lg);
+        padding: var(--spacing-lg);
+        margin-bottom: var(--spacing-md);
+        box-shadow: var(--shadow-sm);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: var(--spacing-md);
+    }
+    
+    .habit-item.inactive {
+        opacity: 0.6;
+        border-left: 4px solid var(--border);
+    }
+    
+    .habit-item.active {
+        border-left: 4px solid var(--primary-green);
+    }
+    
+    .habit-info {
+        flex: 1;
+        min-width: 200px;
+    }
+    
+    .habit-info h3 {
+        margin-bottom: var(--spacing-xs);
+        color: var(--dark-green);
+    }
+    
+    .habit-meta {
+        display: flex;
+        gap: var(--spacing-md);
+        font-size: var(--font-size-sm);
+        color: var(--text-light);
+    }
+    
+    .habit-stats {
+        display: flex;
+        gap: var(--spacing-lg);
+        text-align: center;
+    }
+    
+    .stat-box {
+        padding: var(--spacing-sm) var(--spacing-md);
+        background: var(--bg-primary);
+        border-radius: var(--radius-md);
+        min-width: 80px;
+    }
+    
+    .stat-box .stat-number {
+        display: block;
+        font-size: var(--font-size-xl);
+        font-weight: 700;
+        color: var(--primary-green);
+    }
+    
+    .stat-box .stat-label {
+        font-size: var(--font-size-xs);
+        color: var(--text-light);
+    }
+    
+    .habit-actions {
+        display: flex;
+        gap: var(--spacing-sm);
+    }
+    
+    .status-badge {
+        display: inline-block;
+        padding: var(--spacing-xs) var(--spacing-sm);
+        border-radius: var(--radius-full);
+        font-size: var(--font-size-xs);
+        font-weight: 500;
+    }
+    
+    .status-badge.active {
+        background: #E8F5E9;
+        color: var(--dark-green);
+    }
+    
+    .status-badge.inactive {
+        background: #F5F5F5;
+        color: var(--text-light);
+    }
+    
+    @media (max-width: 600px) {
+        .habit-item {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        .habit-stats {
+            width: 100%;
+            justify-content: space-around;
+        }
+        
+        .habit-actions {
+            width: 100%;
+        }
+        
+        .habit-actions .btn {
+            flex: 1;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="habit-list-container">
+    <div class="list-header">
+        <h1>My Habits</h1>
+        <a href="{% url 'habit_create' %}" class="btn btn-primary">+ New Habit</a>
+    </div>
+    
+    {% if habits_with_stats %}
+        {% for item in habits_with_stats %}
+            <div class="habit-item {% if item.habit.is_active %}active{% else %}inactive{% endif %}">
+                <div class="habit-info">
+                    <h3>{{ item.habit.name }}</h3>
+                    <div class="habit-meta">
+                        <span>📅 {{ item.habit.get_frequency_display }}</span>
+                        <span class="status-badge {% if item.habit.is_active %}active{% else %}inactive{% endif %}">
+                            {% if item.habit.is_active %}Active{% else %}Inactive{% endif %}
+                        </span>
+                    </div>
+                    {% if item.habit.description %}
+                        <p style="margin-top: var(--spacing-sm); color: var(--text-light); font-size: var(--font-size-sm);">
+                            {{ item.habit.description|truncatewords:20 }}
+                        </p>
+                    {% endif %}
+                </div>
+                
+                <div class="habit-stats">
+                    <div class="stat-box">
+                        <span class="stat-number">{{ item.stats.current_streak }}</span>
+                        <span class="stat-label">Streak</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-number">{{ item.stats.best_streak }}</span>
+                        <span class="stat-label">Best</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-number">{{ item.stats.total_completions }}</span>
+                        <span class="stat-label">Total</span>
+                    </div>
+                </div>
+                
+                <div class="habit-actions">
+                    <a href="{% url 'habit_detail' pk=item.habit.pk %}" class="btn btn-secondary btn-small">
+                        View
+                    </a>
+                    <a href="{% url 'habit_edit' pk=item.habit.pk %}" class="btn btn-secondary btn-small">
+                        Edit
+                    </a>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="empty-state">
+            <div class="empty-icon">🌱</div>
+            <h3>No habits yet!</h3>
+            <p>Create your first habit to start growing your garden.</p>
+            <a href="{% url 'habit_create' %}" class="btn btn-primary">Create First Habit</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

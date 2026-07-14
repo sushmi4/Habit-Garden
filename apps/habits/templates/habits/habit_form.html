@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }} - Habit Garden{% endblock %}
+
+{% block extra_css %}
+<style>
+    .form-container {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    
+    .form-card {
+        background: var(--white);
+        border-radius: var(--radius-xl);
+        box-shadow: var(--shadow-lg);
+        padding: var(--spacing-2xl);
+    }
+    
+    .form-header {
+        text-align: center;
+        margin-bottom: var(--spacing-xl);
+    }
+    
+    .form-header .icon {
+        font-size: 3rem;
+        margin-bottom: var(--spacing-md);
+    }
+    
+    .form-header h1 {
+        color: var(--dark-green);
+        margin-bottom: var(--spacing-sm);
+    }
+    
+    .form-group {
+        margin-bottom: var(--spacing-lg);
+    }
+    
+    .form-group label {
+        display: block;
+        margin-bottom: var(--spacing-sm);
+        font-weight: 500;
+        color: var(--text-dark);
+    }
+    
+    .form-input {
+        width: 100%;
+        padding: var(--spacing-md);
+        font-size: var(--font-size-base);
+        border: 2px solid var(--border);
+        border-radius: var(--radius-md);
+        transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+    }
+    
+    .form-input:focus {
+        outline: none;
+        border-color: var(--primary-green);
+        box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+    }
+    
+    .form-help {
+        font-size: var(--font-size-xs);
+        color: var(--text-light);
+        margin-top: var(--spacing-xs);
+    }
+    
+    .errorlist {
+        list-style: none;
+        color: var(--berry-red);
+        font-size: var(--font-size-sm);
+        margin-top: var(--spacing-xs);
+    }
+    
+    .form-actions {
+        display: flex;
+        gap: var(--spacing-md);
+        margin-top: var(--spacing-xl);
+    }
+    
+    .form-actions .btn {
+        flex: 1;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="form-card">
+        <div class="form-header">
+            <div class="icon">📝</div>
+            <h1>{{ title }}</h1>
+            <p>{% if habit %}Update your habit details{% else %}Create a new habit to track{% endif %}</p>
+        </div>
+        
+        <form method="POST">
+            {% csrf_token %}
+            
+            {% for field in form %}
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    
+                    {% if field.help_text %}
+                        <p class="form-help">{{ field.help_text }}</p>
+                    {% endif %}
+                    
+                    {% if field.errors %}
+                        <ul class="errorlist">
+                            {% for error in field.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            
+            <div class="form-actions">
+                <a href="{% if habit %}{% url 'habit_detail' pk=habit.pk %}{% else %}{% url 'habit_list' %}{% endif %}" 
+                   class="btn btn-secondary">
+                    Cancel
+                </a>
+                <button type="submit" class="btn btn-primary">
+                    {% if habit %}Save Changes{% else %}Create Habit{% endif %}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
