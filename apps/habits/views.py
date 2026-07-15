@@ -16,6 +16,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from .models import Habit, HabitCompletion
 from .forms import HabitForm, HabitCompletionForm
 from .utils import calculate_streak, get_best_streak, get_habit_stats
+from apps.garden.utils import create_plant_for_habit
 
 
 @login_required
@@ -111,6 +112,7 @@ def habit_create(request):
         
         if form.is_valid():
             habit = form.save()
+            create_plant_for_habit(habit)
             messages.success(request, f'Habit "{habit.name}" created! Start building your streak!')
             return redirect('habit_detail', pk=habit.pk)
     else:

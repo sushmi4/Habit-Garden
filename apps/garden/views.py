@@ -66,6 +66,7 @@ def plant_detail(request, pk):
     
     # Calculate current streak for the linked habit
     streak = calculate_streak(plant.habit)
+    plant.update_growth(streak)
     
     # Get care tips based on plant status
     tips = get_care_tips(plant, streak)
