@@ -116,10 +116,10 @@
             <div class="form-actions">
                 <a href="{% if habit %}{% url 'habit_detail' pk=habit.pk %}{% else %}{% url 'habit_list' %}{% endif %}" 
                    class="btn btn-secondary">
-                    Cancel
+                    ❌ Cancel
                 </a>
                 <button type="submit" class="btn btn-primary">
-                    {% if habit %}Save Changes{% else %}Create Habit{% endif %}
+                    {% if habit %}💾 Save Changes{% else %}🌱 Create Habit{% endif %}
                 </button>
             </div>
         </form>

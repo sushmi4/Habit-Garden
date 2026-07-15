@@ -8,19 +8,59 @@
     .hero {
         text-align: center;
         padding: var(--spacing-2xl) 0;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .hero-decor {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        overflow: hidden;
+    }
+    
+    .hero-decor .leaf {
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        background: var(--primary-green);
+        border-radius: 0 50% 50% 50%;
+        opacity: 0.08;
+    }
+    
+    .hero-decor .leaf:nth-child(1) { top: 15%; left: 8%; width: 18px; height: 18px; animation: drift 6s ease-in-out infinite; }
+    .hero-decor .leaf:nth-child(2) { top: 60%; left: 4%; width: 14px; height: 14px; animation: drift 7s ease-in-out infinite reverse; background: var(--light-green); }
+    .hero-decor .leaf:nth-child(3) { top: 25%; right: 10%; width: 16px; height: 16px; animation: drift 5s ease-in-out infinite; animation-delay: -1s; }
+    .hero-decor .leaf:nth-child(4) { top: 70%; right: 6%; width: 20px; height: 20px; animation: drift 8s ease-in-out infinite reverse; animation-delay: -2s; background: var(--dark-green); opacity: 0.06; }
+    .hero-decor .leaf:nth-child(5) { top: 40%; left: 2%; width: 10px; height: 10px; animation: drift 6.5s ease-in-out infinite; animation-delay: -3s; background: var(--sky-blue); opacity: 0.1; }
+    .hero-decor .leaf:nth-child(6) { top: 45%; right: 3%; width: 15px; height: 15px; animation: drift 7.5s ease-in-out infinite reverse; animation-delay: -1.5s; }
+    
+    @keyframes drift {
+        0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
+        25% { transform: translateY(-8px) rotate(45deg) scale(1.1); }
+        50% { transform: translateY(-4px) rotate(90deg) scale(0.95); }
+        75% { transform: translateY(-10px) rotate(135deg) scale(1.05); }
     }
     
     .hero h1 {
         font-size: 2.5rem;
         color: var(--forest-green);
         margin-bottom: var(--spacing-md);
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        position: relative;
+        z-index: 1;
     }
     
     .hero p {
         font-size: var(--font-size-xl);
         color: var(--text-light);
         max-width: 600px;
-            margin: 0 auto var(--spacing-lg);
+        margin: 0 auto var(--spacing-lg);
+        position: relative;
+        z-index: 1;
     }
     
     .hero-cta {
@@ -28,6 +68,8 @@
         gap: var(--spacing-md);
         justify-content: center;
         flex-wrap: wrap;
+        position: relative;
+        z-index: 1;
     }
     
     .features {
@@ -40,12 +82,31 @@
     .feature-card {
         text-align: center;
         padding: var(--spacing-xl);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .feature-card::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--primary-green), var(--light-green));
+        border-radius: 0 0 var(--radius-lg) var(--radius-lg);
     }
     
     .feature-icon {
         font-size: 3rem;
         margin-bottom: var(--spacing-md);
+        display: inline-block;
+        animation: pulse 3s ease-in-out infinite;
     }
+    
+    .feature-card:nth-child(1) .feature-icon { animation-delay: 0s; }
+    .feature-card:nth-child(2) .feature-icon { animation-delay: 1s; }
+    .feature-card:nth-child(3) .feature-icon { animation-delay: 2s; }
     
     .feature-card h3 {
         color: var(--dark-green);
@@ -58,12 +119,14 @@
     }
     
     .garden-preview {
-        background: linear-gradient(to bottom, #87CEEB 0%, #87CEEB 60%, #8D6E63 60%, #5D4037 100%);
+        background: linear-gradient(to bottom, #87CEEB 0%, #B3E5FC 30%, #81C784 55%, #8D6E63 60%, #5D4037 100%);
         border-radius: var(--radius-xl);
         margin-top: var(--spacing-2xl);
-        min-height: 200px;
+        min-height: 220px;
         overflow: hidden;
         padding: var(--spacing-2xl) 0;
+        position: relative;
+        box-shadow: 0 8px 32px rgba(93, 64, 55, 0.2);
     }
     
     .marquee-container {
@@ -89,6 +152,7 @@
     .preview-plant {
         font-size: 4rem;
         animation: plantFloat 4s ease-in-out infinite;
+        filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.15));
     }
     
     .preview-plant:nth-child(odd)  { animation-duration: 3.5s; }
@@ -107,6 +171,14 @@
 {% block content %}
 <!-- Hero Section -->
 <section class="hero">
+    <div class="hero-decor">
+        <div class="leaf"></div>
+        <div class="leaf"></div>
+        <div class="leaf"></div>
+        <div class="leaf"></div>
+        <div class="leaf"></div>
+        <div class="leaf"></div>
+    </div>
     <h1>🌱 Welcome to Habit Garden</h1>
     <p>
         Transform your daily habits into a beautiful garden. 
