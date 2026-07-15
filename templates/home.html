@@ -60,29 +60,46 @@
     .garden-preview {
         background: linear-gradient(to bottom, #87CEEB 0%, #87CEEB 60%, #8D6E63 60%, #5D4037 100%);
         border-radius: var(--radius-xl);
-        padding: var(--spacing-2xl);
         margin-top: var(--spacing-2xl);
-        text-align: center;
         min-height: 200px;
+        overflow: hidden;
+        padding: var(--spacing-2xl) 0;
+    }
+    
+    .marquee-container {
+        display: flex;
+        overflow: hidden;
+    }
+    
+    .marquee-content {
         display: flex;
         align-items: flex-end;
-        justify-content: center;
-        gap: var(--spacing-lg);
-        flex-wrap: wrap;
+        gap: var(--spacing-2xl);
+        flex-shrink: 0;
+        min-width: 100%;
+        justify-content: space-around;
+        animation: marquee 10s linear infinite;
+    }
+    
+    @keyframes marquee {
+        0%   { transform: translateX(0); }
+        100% { transform: translateX(-100%); }
     }
     
     .preview-plant {
         font-size: 4rem;
-        animation: sway 3s ease-in-out infinite;
+        animation: plantFloat 4s ease-in-out infinite;
     }
     
-    .preview-plant:nth-child(2) { animation-delay: 0.5s; }
-    .preview-plant:nth-child(3) { animation-delay: 1s; }
-    .preview-plant:nth-child(4) { animation-delay: 1.5s; }
+    .preview-plant:nth-child(odd)  { animation-duration: 3.5s; }
+    .preview-plant:nth-child(even) { animation-duration: 4.2s; animation-delay: -1.5s; }
     
-    @keyframes sway {
-        0%, 100% { transform: rotate(-3deg); }
-        50% { transform: rotate(3deg); }
+    @keyframes plantFloat {
+        0%   { transform: translateY(0) rotate(-2deg) scale(1); }
+        25%  { transform: translateY(-12px) rotate(1deg) scale(1.02); }
+        50%  { transform: translateY(-6px) rotate(3deg) scale(1); }
+        75%  { transform: translateY(-14px) rotate(-1deg) scale(1.03); }
+        100% { transform: translateY(0) rotate(-2deg) scale(1); }
     }
 </style>
 {% endblock %}
@@ -130,9 +147,23 @@
 
 <!-- Garden Preview -->
 <div class="garden-preview">
-    <div class="preview-plant">🌱</div>
-    <div class="preview-plant">🌿</div>
-    <div class="preview-plant">🌻</div>
-    <div class="preview-plant">🌳</div>
+    <div class="marquee-container">
+        <div class="marquee-content">
+            <div class="preview-plant">🌱</div>
+            <div class="preview-plant">🌿</div>
+            <div class="preview-plant">🌻</div>
+            <div class="preview-plant">🌳</div>
+            <div class="preview-plant">🌺</div>
+            <div class="preview-plant">🌷</div>
+        </div>
+        <div class="marquee-content" aria-hidden="true">
+            <div class="preview-plant">🌱</div>
+            <div class="preview-plant">🌿</div>
+            <div class="preview-plant">🌻</div>
+            <div class="preview-plant">🌳</div>
+            <div class="preview-plant">🌺</div>
+            <div class="preview-plant">🌷</div>
+        </div>
+    </div>
 </div>
 {% endblock %}
