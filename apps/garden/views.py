@@ -23,10 +23,11 @@ def garden_view(request):
     # Get all plants for the current user
     plants = Plant.objects.filter(user=request.user)
     
-    # Update plant stages based on current streaks
+    # Update plant stages and health based on current streaks
     for plant in plants:
         streak = calculate_streak(plant.habit)
         plant.update_growth(streak)
+        plant.update_health()
     
     # Get garden statistics
     stats = get_garden_stats(request.user)
@@ -67,6 +68,7 @@ def plant_detail(request, pk):
     # Calculate current streak for the linked habit
     streak = calculate_streak(plant.habit)
     plant.update_growth(streak)
+    plant.update_health()
     
     # Get care tips based on plant status
     tips = get_care_tips(plant, streak)

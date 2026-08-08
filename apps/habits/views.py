@@ -14,8 +14,9 @@ from django.utils import timezone
 from django.views.decorators.csrf import ensure_csrf_cookie
 
 from .models import Habit, HabitCompletion
-from .forms import HabitForm, HabitCompletionForm
-from .utils import calculate_streak, get_best_streak, get_habit_stats
+from .forms import HabitForm
+from .utils import calculate_streak, get_habit_stats, is_completed_in_period
+from apps.garden.models import Plant
 from apps.garden.utils import create_plant_for_habit
 
 
@@ -40,11 +41,9 @@ def dashboard(request):
     # Add completion status and streak info to each habit
     habits_with_status = []
     for habit in habits:
-        # Check if completed today
-        completed_today = HabitCompletion.objects.filter(
-            habit=habit,
-            date=today
-        ).exists()
+        # Check if completed in the current period (today for daily,
+        # this week for weekly habits)
+        completed_today = is_completed_in_period(habit, today)
         
         # Calculate streak
         streak = calculate_streak(habit)
@@ -53,6 +52,7 @@ def dashboard(request):
             'habit': habit,
             'completed_today': completed_today,
             'current_streak': streak,
+            'streak_percent': min(streak, 100),
         })
     
     # Calculate overall stats
@@ -242,12 +242,19 @@ def toggle_complete(request, pk):
     # Calculate new streak
     streak = calculate_streak(habit)
     
+    # Keep the plant in sync with the latest streak
+    plant = Plant.objects.filter(habit=habit).first()
+    if plant is not None:
+        if completed:
+            plant.water()
+        plant.update_growth(streak)
+    
     # Recalculate overall stats for the dashboard
     all_habits = Habit.objects.filter(user=request.user, is_active=True)
     total_habits = all_habits.count()
     completed_count = 0
     for h in all_habits:
-        if HabitCompletion.objects.filter(habit=h, date=today).exists():
+        if is_completed_in_period(h, today):
             completed_count += 1
     completion_rate = (completed_count / total_habits * 100) if total_habits > 0 else 0
     ring_offset = 251.2 * (1 - completion_rate / 100)

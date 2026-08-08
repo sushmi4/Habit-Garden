@@ -9,6 +9,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
+from django.utils.http import url_has_allowed_host_and_scheme
 from .forms import UserRegistrationForm, UserUpdateForm, ProfileUpdateForm
 
 
@@ -78,9 +79,16 @@ def login_view(request):
             login(request, user)
             messages.success(request, f'Welcome back, {username}!')
             
-            # Redirect to 'next' parameter if it exists, otherwise dashboard
-            next_url = request.GET.get('next', 'dashboard')
-            return redirect(next_url)
+            # Redirect to 'next' parameter if it is a safe local URL,
+            # otherwise default to the dashboard.
+            next_url = request.GET.get('next', '')
+            if url_has_allowed_host_and_scheme(
+                next_url,
+                allowed_hosts={request.get_host()},
+                require_https=request.is_secure(),
+            ):
+                return redirect(next_url)
+            return redirect('dashboard')
         else:
             # Invalid credentials
             messages.error(
@@ -95,10 +103,12 @@ def logout_view(request):
     """
     Handle user logout.
     
-    Logs out the user and redirects to home page.
+    Only accepts POST requests to prevent CSRF-based logout.
+    GET requests are redirected to the home page without logging out.
     """
-    logout(request)
-    messages.info(request, 'You have been logged out successfully.')
+    if request.method == 'POST':
+        logout(request)
+        messages.info(request, 'You have been logged out successfully.')
     return redirect('home')
 
 

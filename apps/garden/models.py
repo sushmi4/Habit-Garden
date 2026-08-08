@@ -156,6 +156,20 @@ class Plant(models.Model):
         self.health = max(0, self.health - health_loss)
         self.save()
     
+    def update_health(self):
+        """
+        Recalculate plant health based on days since it was last watered.
+        
+        Health decreases by 20% per missed day (minimum 0). Plants that have
+        never been watered decay from their creation date, so health always
+        reflects the current state without needing a background job.
+        """
+        reference = self.last_watered or self.created_at
+        if reference is not None:
+            days_missed = max(0, (timezone.now() - reference).days)
+            self.health = max(0, 100 - days_missed * 20)
+        self.save()
+    
     def get_emoji(self):
         """
         Get an emoji representation of the plant based on its stage and type.

@@ -78,9 +78,8 @@ def update_all_plants(user):
         # Update plant growth
         plant.update_growth(streak)
         
-        # If streak is 0, reduce health
-        if streak == 0:
-            plant.dry_out(1)
+        # Update plant health based on days missed
+        plant.update_health()
 
 
 def get_garden_stats(user):

@@ -253,6 +253,28 @@ a:hover {
     color: var(--white);
 }
 
+.logout-form {
+    margin: 0;
+}
+
+.logout-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-dark);
+    font-weight: 500;
+    font-size: var(--font-size-base);
+    font-family: inherit;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--radius-md);
+    transition: all var(--transition-fast);
+}
+
+.logout-btn:hover {
+    background: var(--bg-primary);
+    color: var(--primary-green);
+}
+
 /* ============================================
    Buttons
    ============================================ */
