@@ -235,15 +235,22 @@ a:hover {
     list-style: none;
 }
 
-.navbar-menu a {
+.navbar-menu a,
+.logout-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
     color: var(--text-dark);
     font-weight: 500;
+    font-size: var(--font-size-base);
     padding: var(--spacing-sm) var(--spacing-md);
     border-radius: var(--radius-md);
     transition: all var(--transition-fast);
 }
 
-.navbar-menu a:hover {
+.navbar-menu a:hover,
+.logout-btn:hover {
     background: var(--bg-primary);
     color: var(--primary-green);
 }
@@ -261,18 +268,7 @@ a:hover {
     background: none;
     border: none;
     cursor: pointer;
-    color: var(--text-dark);
-    font-weight: 500;
-    font-size: var(--font-size-base);
     font-family: inherit;
-    padding: var(--spacing-sm) var(--spacing-md);
-    border-radius: var(--radius-md);
-    transition: all var(--transition-fast);
-}
-
-.logout-btn:hover {
-    background: var(--bg-primary);
-    color: var(--primary-green);
 }
 
 /* ============================================
